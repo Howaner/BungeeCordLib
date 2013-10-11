@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 public class BungeeCord {
 	private BungeePlugin plugin;
@@ -20,6 +21,7 @@ public class BungeeCord {
 	private Map<Integer, Thread> packetServers = new HashMap<Integer, Thread>();
 	private List<String> bungeeServers = new ArrayList<String>();
 	private String serverName;
+	private Map<Player, String> playerIps = new HashMap<Player, String>();
 	
 	public BungeeCord(BungeePlugin plugin) {
 		this.plugin = plugin;
@@ -37,12 +39,44 @@ public class BungeeCord {
 		}
 	}
 	
+	public String getPlayerIp(Player player) {
+		return playerIps.get(player);
+	}
+	
+	public void setPlayerIp(Player player, String ip) {
+		this.playerIps.put(player, ip);
+	}
+	
+	public boolean havePlayerIp(Player player) {
+		return this.playerIps.containsKey(player);
+	}
+	
+	public void removePlayerIp(Player player) {
+		this.playerIps.remove(player);
+	}
+	
 	public String getServerName() {
 		return this.serverName;
 	}
 	
 	public void setServerName(String server) {
 		this.serverName = server;
+	}
+	
+	public void receivePlayerIp(Player player) {
+		if (player == null) return;
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(b);
+		
+		try {
+			out.writeUTF("IP");
+			player.sendPluginMessage(BungeePlugin.instance, "BungeeCord", b.toByteArray());
+			
+			out.close();
+			b.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void receiveServerName() {

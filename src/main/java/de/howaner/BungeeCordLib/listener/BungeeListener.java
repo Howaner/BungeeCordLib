@@ -34,6 +34,11 @@ public class BungeeListener implements PluginMessageListener {
 			} else if (channel.equals("GetServer")) {
 				String name = in.readUTF();
 				BungeeCord.getManager().setServerName(name);
+			} else if (channel.equals("IP")) {
+				String address = in.readUTF() + ":" + in.readInt();
+				BungeeCord.getManager().setPlayerIp(player, address);
+			} else {
+				BungeePlugin.log.info("Undefined BungeeCord Channel: " + channel);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
