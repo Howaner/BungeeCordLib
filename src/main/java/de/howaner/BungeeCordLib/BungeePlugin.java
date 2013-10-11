@@ -25,7 +25,8 @@ public class BungeePlugin extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		
+		for (int id : manager.getPacketServers())
+			manager.removePacketServer(id);
 	}
 	
 	public static BungeeCord getManager() {

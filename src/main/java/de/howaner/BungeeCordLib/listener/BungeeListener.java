@@ -1,6 +1,7 @@
 package de.howaner.BungeeCordLib.listener;
 
 import de.howaner.BungeeCordLib.BungeeCord;
+import de.howaner.BungeeCordLib.BungeePlugin;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.util.ArrayList;

@@ -4,13 +4,9 @@ import de.howaner.BungeeCordLib.event.BungeeAddServerEvent;
 import de.howaner.BungeeCordLib.event.BungeeRemoveServerEvent;
 import de.howaner.BungeeCordLib.server.BungeePacketServer;
 import de.howaner.BungeeCordLib.server.BungeeServer;
-import java.io.BufferedReader;
+import de.howaner.BungeeCordLib.util.ServerConnectionThread;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +17,7 @@ import org.bukkit.ChatColor;
 public class BungeeCord {
 	private BungeePlugin plugin;
 	private Map<String, BungeeServer> servers = new HashMap<String, BungeeServer>();
-	private List<Integer> packetServers = new ArrayList<Integer>();
+	private Map<Integer, Thread> packetServers = new HashMap<Integer, Thread>();
 	private List<String> bungeeServers = new ArrayList<String>();
 	
 	public BungeeCord(BungeePlugin plugin) {
@@ -41,17 +37,22 @@ public class BungeeCord {
 	
 	public void receiveServerPlayers() {
 		if (Bukkit.getOnlinePlayers().length == 0) return;
-		ByteArrayOutputStream b = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(b);
 		
-		try {
-			out.writeUTF("PlayerCount");
-			out.writeUTF("ALL");
-			Bukkit.getOnlinePlayers()[0].sendPluginMessage(BungeePlugin.instance, "BungeeCord", b.toByteArray());
-			out.close();
-			b.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		//TODO: Fix Bug (No Response from BungeeCord)
+		for (String server : this.servers.keySet()) {
+			BungeePlugin.log.info("Send: " + server);
+			ByteArrayOutputStream b = new ByteArrayOutputStream();
+			DataOutputStream out = new DataOutputStream(b);
+
+			try {
+				out.writeUTF("PlayerList");
+				out.writeUTF(server);
+				Bukkit.getOnlinePlayers()[0].sendPluginMessage(BungeePlugin.instance, "BungeeCord", b.toByteArray());
+				out.close();
+				b.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -96,54 +97,31 @@ public class BungeeCord {
 		this.bungeeServers = servers;
 	}
 	
+	public List<Integer> getPacketServers() {
+		List<Integer> serverList = new ArrayList<Integer>();
+		serverList.addAll(this.packetServers.keySet());
+		return serverList;
+	}
+	
 	public boolean containsPacketServer(int id) {
-		return this.packetServers.contains(id);
+		return this.packetServers.containsKey(id);
 	}
 	
 	public void removePacketServer(int id) {
+		Thread thread = this.packetServers.get(id);
+		if (thread == null) return;
+		thread.stop();
 		this.packetServers.remove(id);
 	}
 	
 	public int addPacketServer(final int port, final BungeePacketServer server) {
-		int newestId = 0;
-		for (int key : packetServers)
-			if (key >= newestId) newestId += 1;
+		int id = 0;
+		while (this.packetServers.containsKey(id))
+			id += 1;
 		
-		final int id = newestId;
-		this.packetServers.add(id);
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					ServerSocket serverSocket = new ServerSocket(port);
-					BungeePlugin.log.info("Packet Server on Port " + port + " created!");
-					
-					while (BungeeCord.this.packetServers.contains(id)) {
-						Socket socket = serverSocket.accept();
-						BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-						String s = in.readLine();
-						List<String> request = new ArrayList<String>();
-						String line;
-						while ((line = in.readLine()) != null) {
-							request.add(line);
-						}
-						
-						String[] response = server.run(s, request.toArray(new String[request.size()]));
-						StringBuilder responseBuilder = new StringBuilder();
-						for (String l : response)
-							responseBuilder.append(l + '\n');
-						
-						PrintStream out = new PrintStream(socket.getOutputStream());
-						out.print(responseBuilder.toString());
-						out.flush();
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				} finally {
-					
-				}
-			}
-		}.start();
+		Thread thread = new ServerConnectionThread(port, server);
+		this.packetServers.put(id, thread);
+		thread.start();
 		return id;
 	}
 	
