@@ -66,7 +66,9 @@ public class BungeeServer {
 		b.close();
 	}
 	
-	public void sendPacket(final String myServerName, final int serverPort, final BungeePacket packet) throws Exception {
+	public void sendPacket(final int serverPort, final BungeePacket packet) throws Exception {
+		if (BungeeCord.getManager().getServerName() == null || BungeeCord.getManager().getServerName().isEmpty())
+			throw new Exception("This server has no name!");
 		final String address = (this.ip.contains(":")) ? this.ip.split(":")[0] : this.ip;
 		
 		new Thread() {
@@ -80,7 +82,7 @@ public class BungeeServer {
 					
 					//Send Message
 					StringBuilder builder = new StringBuilder();
-					builder.append(myServerName);
+					builder.append(BungeeCord.getManager().getServerName());
 					builder.append('\n');
 					builder.append(packet.getTitle());
 					builder.append('\n');

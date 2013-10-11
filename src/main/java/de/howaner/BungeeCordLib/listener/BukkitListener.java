@@ -9,6 +9,7 @@ public class BukkitListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
+		BungeeCord.getManager().receiveServerName();
 		BungeeCord.getManager().receiveBungeeServers();
 		BungeeCord.getManager().receiveServerPlayers();
 	}

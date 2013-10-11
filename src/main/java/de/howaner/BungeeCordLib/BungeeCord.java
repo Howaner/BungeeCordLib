@@ -19,6 +19,7 @@ public class BungeeCord {
 	private Map<String, BungeeServer> servers = new HashMap<String, BungeeServer>();
 	private Map<Integer, Thread> packetServers = new HashMap<Integer, Thread>();
 	private List<String> bungeeServers = new ArrayList<String>();
+	private String serverName;
 	
 	public BungeeCord(BungeePlugin plugin) {
 		this.plugin = plugin;
@@ -32,6 +33,31 @@ public class BungeeCord {
 		if (Bukkit.getOnlinePlayers().length != 0) {
 			this.receiveBungeeServers();
 			this.receiveServerPlayers();
+			this.receiveServerName();
+		}
+	}
+	
+	public String getServerName() {
+		return this.serverName;
+	}
+	
+	public void setServerName(String server) {
+		this.serverName = server;
+	}
+	
+	public void receiveServerName() {
+		if (Bukkit.getOnlinePlayers().length == 0) return;
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(b);
+		
+		try {
+			out.writeUTF("GetServer");
+			Bukkit.getOnlinePlayers()[0].sendPluginMessage(BungeePlugin.instance, "BungeeCord", b.toByteArray());
+			
+			out.close();
+			b.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -81,6 +107,7 @@ public class BungeeCord {
 			out.writeUTF("Message");
 			out.writeUTF(player);
 			out.writeUTF(message);
+			Bukkit.getOnlinePlayers()[0].sendPluginMessage(BungeePlugin.instance, "BungeeCord", b.toByteArray());
 			out.close();
 			b.close();
 		} catch (Exception e) {

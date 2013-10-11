@@ -31,8 +31,9 @@ public class BungeeListener implements PluginMessageListener {
 				for (String s : playerArray)
 					players.add(s);
 				BungeeCord.getManager().getServer(server).setPlayers(players);
-			} else if (channel.equals("")) {
-				
+			} else if (channel.equals("GetServer")) {
+				String name = in.readUTF();
+				BungeeCord.getManager().setServerName(name);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
