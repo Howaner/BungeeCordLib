@@ -16,6 +16,17 @@
 			<id>Bukkit Repo</id>
 			<url>http://repo.bukkit.org/content/groups/public/</url>
 		</repository>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</releases>
+			<id>de.howaner</id>
+			<name>Howaner</name>
+			<url>http://repo.howaner.de/</url>
+			<layout>default</layout>
+		</repository>
 	</repositories>
 	
 	<build>
