@@ -3,7 +3,7 @@ package de.howaner.BungeeCordLib.event;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-/*
+/**
  * This was call, when BungeeCord send me a new List with the Online Players
  */
 public class UpdateOnlinePlayersEvent extends Event {

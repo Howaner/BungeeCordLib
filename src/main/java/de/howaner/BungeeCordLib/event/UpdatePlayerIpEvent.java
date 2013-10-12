@@ -3,7 +3,7 @@ package de.howaner.BungeeCordLib.event;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-/*
+/**
  * This was call, when BungeeCord send the right Player Ip
  */
 public class UpdatePlayerIpEvent extends Event {

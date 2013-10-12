@@ -20,14 +20,14 @@ public class BungeeServer {
 		this.ip = ip;
 	}
 	
-	/*
+	/**
 	 * Get the Servername
 	 */
 	public String getName() {
 		return this.name;
 	}
 	
-	/*
+	/**
 	 * Get the Server IP
 	 */
 	public String getIp() {
@@ -38,7 +38,7 @@ public class BungeeServer {
 		this.ip = ip;
 	}
 	
-	/*
+	/**
 	 * This makes a Ping to the Server
 	 * 
 	 * @return The Motd, Slots and Online Players
@@ -54,7 +54,7 @@ public class BungeeServer {
 		}
 	}
 	
-	/*
+	/**
 	 * Teleport a Player to this Server
 	 * 
 	 * @param player The Player
@@ -70,7 +70,7 @@ public class BungeeServer {
 		b.close();
 	}
 	
-	/*
+	/**
 	 * Send a Packet to this Servers
 	 * 
 	 * @param serverPort The Port of this Server

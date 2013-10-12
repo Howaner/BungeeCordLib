@@ -17,21 +17,21 @@ public class ServerData {
 		return this.server;
 	}
 	
-	/*
+	/**
 	 * Get the Maximum Players
 	 */
 	public int getSlots() {
 		return this.slots;
 	}
 	
-	/*
+	/**
 	 * Get the Online Players of the Server
 	 */
 	public int getPlayers() {
 		return this.players;
 	}
 	
-	/*
+	/**
 	 * Get the Message of the Day
 	 */
 	public String getMotd() {

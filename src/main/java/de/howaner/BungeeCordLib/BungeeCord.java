@@ -23,7 +23,7 @@ public class BungeeCord {
 	private String[] onlinePlayers = new String[0];
 	private Map<String, String> playerIps = new HashMap<String, String>();
 	
-	/*
+	/**
 	 * Get the BungeeCord instance
 	 */
 	public static BungeeCord getManager() {
@@ -40,7 +40,7 @@ public class BungeeCord {
 		}
 	}
 	
-	/*
+	/**
 	 * Get Online Players in all BungeeCord Servers
 	 * 
 	 * @return Online Players in a String Array
@@ -49,7 +49,7 @@ public class BungeeCord {
 		return this.onlinePlayers;
 	}
 	
-	/*
+	/**
 	 * Set Online Players (its for my Plugin, not for your!)
 	 * 
 	 * @param players The Array with the Players
@@ -58,7 +58,7 @@ public class BungeeCord {
 		this.onlinePlayers = players;
 	}
 	
-	/*
+	/**
 	 * Return the right Player Ip. (When you use this in PlayerJoinEvent, please make a Scheduler with 5 ticks)
 	 * 
 	 * @return IP:Port
@@ -67,7 +67,7 @@ public class BungeeCord {
 		return playerIps.get(player.toLowerCase());
 	}
 	
-	/*
+	/**
 	 * Set the right Player Ip (its for my Plugin, not for your!)
 	 * 
 	 * @praram player The Playername
@@ -77,7 +77,7 @@ public class BungeeCord {
 		this.playerIps.put(player.toLowerCase(), ip);
 	}
 	
-	/*
+	/**
 	 * Is the Player in the List?
 	 * 
 	 * @param player The Playername
@@ -86,7 +86,7 @@ public class BungeeCord {
 		return this.playerIps.containsKey(player.toLowerCase());
 	}
 	
-	/*
+	/**
 	 * Remove the player in the IP List
 	 * 
 	 * @param player The Playername
@@ -95,7 +95,7 @@ public class BungeeCord {
 		this.playerIps.remove(player.toLowerCase());
 	}
 	
-	/*
+	/**
 	 * Get the Name of this Server (in BungeeCord)
 	 * Warning! To fill this, Players must join this Server!
 	 * 
@@ -105,7 +105,7 @@ public class BungeeCord {
 		return this.serverName;
 	}
 	
-	/*
+	/**
 	 * Set the Servername (its for my Plugin)
 	 * 
 	 * @param server The Servername
@@ -114,7 +114,7 @@ public class BungeeCord {
 		this.serverName = server;
 	}
 	
-	/*
+	/**
 	 * Send a request to update the Player-Ip from this Player
 	 * 
 	 * @param player The Player Object
@@ -136,7 +136,7 @@ public class BungeeCord {
 		}
 	}
 	
-	/*
+	/**
 	 * Send a request to update the Servername
 	 * Warning! Online Players required
 	 * 
@@ -158,7 +158,7 @@ public class BungeeCord {
 		}
 	}
 	
-	/*
+	/**
 	 * Send a request to update the Online Players
 	 * Warning! Online Players required
 	 */
@@ -179,7 +179,7 @@ public class BungeeCord {
 		}
 	}
 	
-	/*
+	/**
 	 * Send a request to Update the bungeeServers List.
 	 * Warning! Online Players required!
 	 */
@@ -199,7 +199,7 @@ public class BungeeCord {
 		}
 	}
 	
-	/*
+	/**
 	 * Send a message to this player
 	 * Warning! Online Players required!
 	 */
@@ -222,7 +222,7 @@ public class BungeeCord {
 		}
 	}
 	
-	/*
+	/**
 	 * Return all Servers in the BungeeCord config.yml
 	 * Warning! This fill only, when a Player join this Server!
 	 * 
@@ -233,7 +233,7 @@ public class BungeeCord {
 		return this.bungeeServers;
 	}
 	
-	/*
+	/**
 	 * Set the bungeeServers List. (its for my Plugin)
 	 * 
 	 * @param servers The Server List
@@ -242,7 +242,7 @@ public class BungeeCord {
 		this.bungeeServers = servers;
 	}
 	
-	/*
+	/**
 	 * List all Packet Servers
 	 * 
 	 * @return The Ids from all Packet Servers
@@ -253,7 +253,7 @@ public class BungeeCord {
 		return serverList;
 	}
 	
-	/*
+	/**
 	 * Exists a Packet Server with this id?
 	 * 
 	 * @return true or false
@@ -262,7 +262,7 @@ public class BungeeCord {
 		return this.packetServers.containsKey(id);
 	}
 	
-	/*
+	/**
 	 * Remove the Packet Server with this id.
 	 * 
 	 * @args id The Id
@@ -274,7 +274,7 @@ public class BungeeCord {
 		this.packetServers.remove(id);
 	}
 	
-	/*
+	/**
 	 * Create a new Packet Server
 	 * 
 	 * @param port A Port for this Server
@@ -291,7 +291,7 @@ public class BungeeCord {
 		return id;
 	}
 	
-	/*
+	/**
 	 * Add a BungeeServer
 	 * 
 	 * @param name The Servername in the BungeeCord config.
@@ -305,7 +305,7 @@ public class BungeeCord {
 		return server;
 	}
 	
-	/*
+	/**
 	 * Get the Server instance
 	 * 
 	 * @ærgs name The Servername
@@ -315,7 +315,7 @@ public class BungeeCord {
 		return this.servers.get(name);
 	}
 	
-	/*
+	/**
 	 * Return all registed BungeeServer
 	 */
 	public List<BungeeServer> getServers() {
@@ -324,7 +324,7 @@ public class BungeeCord {
 		return serverList;
 	}
 	
-	/*
+	/**
 	 * Is this Server registed?
 	 * 
 	 * @param name The Servername
@@ -333,7 +333,7 @@ public class BungeeCord {
 		return this.servers.containsKey(name);
 	}
 	
-	/*
+	/**
 	 * Remove a Registed Server
 	 * 
 	 * @param name The Servername

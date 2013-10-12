@@ -3,7 +3,7 @@ package de.howaner.BungeeCordLib.event;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-/*
+/**
  * This was call, when BungeeCord sends the Servername
  */
 public class UpdateServerNameEvent extends Event {
