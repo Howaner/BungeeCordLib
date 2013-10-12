@@ -9,27 +9,15 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.entity.Player;
 
 public class BungeeServer {
 	private final String name;
 	private String ip;
-	private List<String> players = new ArrayList<String>();
 	
 	public BungeeServer(final String name, String ip) {
 		this.name = name;
 		this.ip = ip;
-	}
-	
-	public List<String> getPlayers() {
-		if (this.players.isEmpty()) BungeeCord.getManager().receiveServerPlayers();
-		return this.players;
-	}
-	
-	public void setPlayers(List<String> players) {
-		this.players = players;
 	}
 	
 	public String getName() {

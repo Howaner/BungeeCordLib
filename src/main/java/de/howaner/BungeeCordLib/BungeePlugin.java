@@ -15,7 +15,7 @@ public class BungeePlugin extends JavaPlugin {
 	public void onEnable() {
 		log = this.getLogger();
 		instance = this;
-		manager = new BungeeCord(this);
+		manager = new BungeeCord();
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		Bukkit.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new BungeeListener());
 		Bukkit.getPluginManager().registerEvents(new BukkitListener(), this);

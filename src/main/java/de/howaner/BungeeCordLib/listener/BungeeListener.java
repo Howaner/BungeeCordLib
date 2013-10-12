@@ -17,6 +17,7 @@ public class BungeeListener implements PluginMessageListener {
 		DataInputStream in = new DataInputStream(new ByteArrayInputStream(message));
 		try {
 			String channel = in.readUTF();
+			BungeePlugin.log.info("Received BungeeCord Packet: " + channel);
 			if (channel.equals("GetServers")) {
 				String[] serverArray = in.readUTF().split(", ");
 				List<String> servers = new ArrayList<String>();
@@ -24,19 +25,15 @@ public class BungeeListener implements PluginMessageListener {
 					servers.add(s);
 				BungeeCord.getManager().setBungeeServers(servers);
 			} else if (channel.equals("PlayerList")) {
-				String server = in.readUTF();
-				if (!BungeeCord.getManager().existsServer(server)) return;
-				String[] playerArray = in.readUTF().split(", ");
-				List<String> players = new ArrayList<String>();
-				for (String s : playerArray)
-					players.add(s);
-				BungeeCord.getManager().getServer(server).setPlayers(players);
+				if (!in.readUTF().equalsIgnoreCase("ALL")) return;
+				String[] players = in.readUTF().split(", ");
+				BungeeCord.getManager().setOnlinePlayers(players);
 			} else if (channel.equals("GetServer")) {
 				String name = in.readUTF();
 				BungeeCord.getManager().setServerName(name);
 			} else if (channel.equals("IP")) {
 				String address = in.readUTF() + ":" + in.readInt();
-				BungeeCord.getManager().setPlayerIp(player, address);
+				BungeeCord.getManager().setPlayerIp(player.getName(), address);
 			} else {
 				BungeePlugin.log.info("Undefined BungeeCord Channel: " + channel);
 			}

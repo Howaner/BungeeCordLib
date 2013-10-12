@@ -16,16 +16,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class BungeeCord {
-	private BungeePlugin plugin;
 	private Map<String, BungeeServer> servers = new HashMap<String, BungeeServer>();
 	private Map<Integer, Thread> packetServers = new HashMap<Integer, Thread>();
 	private List<String> bungeeServers = new ArrayList<String>();
 	private String serverName;
-	private Map<Player, String> playerIps = new HashMap<Player, String>();
-	
-	public BungeeCord(BungeePlugin plugin) {
-		this.plugin = plugin;
-	}
+	private String[] onlinePlayers = new String[0];
+	private Map<String, String> playerIps = new HashMap<String, String>();
 	
 	public static BungeeCord getManager() {
 		return BungeePlugin.getManager();
@@ -34,25 +30,35 @@ public class BungeeCord {
 	public void initialize() {
 		if (Bukkit.getOnlinePlayers().length != 0) {
 			this.receiveBungeeServers();
-			this.receiveServerPlayers();
+			this.receiveOnlinePlayers();
 			this.receiveServerName();
+			for (Player player : Bukkit.getOnlinePlayers())
+				this.receivePlayerIp(player);
 		}
 	}
 	
-	public String getPlayerIp(Player player) {
-		return playerIps.get(player);
+	public String[] getOnlinePlayers() {
+		return this.onlinePlayers;
 	}
 	
-	public void setPlayerIp(Player player, String ip) {
-		this.playerIps.put(player, ip);
+	public void setOnlinePlayers(String[] players) {
+		this.onlinePlayers = players;
 	}
 	
-	public boolean havePlayerIp(Player player) {
-		return this.playerIps.containsKey(player);
+	public String getPlayerIp(String player) {
+		return playerIps.get(player.toLowerCase());
 	}
 	
-	public void removePlayerIp(Player player) {
-		this.playerIps.remove(player);
+	public void setPlayerIp(String player, String ip) {
+		this.playerIps.put(player.toLowerCase(), ip);
+	}
+	
+	public boolean havePlayerIp(String player) {
+		return this.playerIps.containsKey(player.toLowerCase());
+	}
+	
+	public void removePlayerIp(String player) {
+		this.playerIps.remove(player.toLowerCase());
 	}
 	
 	public String getServerName() {
@@ -68,6 +74,7 @@ public class BungeeCord {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(b);
 		
+		BungeePlugin.log.info("Player Ip from " + player.getName() + " requested!");
 		try {
 			out.writeUTF("IP");
 			player.sendPluginMessage(BungeePlugin.instance, "BungeeCord", b.toByteArray());
@@ -84,6 +91,7 @@ public class BungeeCord {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(b);
 		
+		BungeePlugin.log.info("ServerName requested!");
 		try {
 			out.writeUTF("GetServer");
 			Bukkit.getOnlinePlayers()[0].sendPluginMessage(BungeePlugin.instance, "BungeeCord", b.toByteArray());
@@ -95,24 +103,20 @@ public class BungeeCord {
 		}
 	}
 	
-	public void receiveServerPlayers() {
+	public void receiveOnlinePlayers() {
 		if (Bukkit.getOnlinePlayers().length == 0) return;
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(b);
 		
-		//TODO: Fix Bug (No Response from BungeeCord)
-		for (String server : this.servers.keySet()) {
-			BungeePlugin.log.info("Send: " + server);
-			ByteArrayOutputStream b = new ByteArrayOutputStream();
-			DataOutputStream out = new DataOutputStream(b);
-
-			try {
-				out.writeUTF("PlayerList");
-				out.writeUTF(server);
-				Bukkit.getOnlinePlayers()[0].sendPluginMessage(BungeePlugin.instance, "BungeeCord", b.toByteArray());
-				out.close();
-				b.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		BungeePlugin.log.info("Online Players Requested!");
+		try {
+			out.writeUTF("PlayerList");
+			out.writeUTF("ALL");
+			Bukkit.getOnlinePlayers()[0].sendPluginMessage(BungeePlugin.instance, "BungeeCord", b.toByteArray());
+			out.close();
+			b.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -121,6 +125,7 @@ public class BungeeCord {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(b);
 		
+		BungeePlugin.log.info("Bungee Servers requested!");
 		try {
 			out.writeUTF("GetServers");
 			Bukkit.getOnlinePlayers()[0].sendPluginMessage(BungeePlugin.instance, "BungeeCord", b.toByteArray());
@@ -136,6 +141,7 @@ public class BungeeCord {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(b);
 		
+		BungeePlugin.log.info("Send Message to Player " + player + " requested!");
 		message = ChatColor.translateAlternateColorCodes('&', message);
 		try {
 			out.writeUTF("Message");
