@@ -1,5 +1,5 @@
 name: BungeeCordLib
-version: 1.1
+version: 1.2
 author: Howaner
 description: A Bukkit Library for BungeeCord
 main: de.howaner.BungeeCordLib.BungeePlugin

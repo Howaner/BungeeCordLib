@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.howaner</groupId>
 	<artifactId>BungeeCordLib</artifactId>
-	<version>1.1</version>
+	<version>1.2</version>
 	<name>BungeeCordLib</name>
 	<description>A Bukkit Library for BungeeCord</description>
 	<packaging>jar</packaging>

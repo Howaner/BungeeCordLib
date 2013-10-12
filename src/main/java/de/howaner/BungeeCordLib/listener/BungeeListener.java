@@ -2,10 +2,15 @@ package de.howaner.BungeeCordLib.listener;
 
 import de.howaner.BungeeCordLib.BungeeCord;
 import de.howaner.BungeeCordLib.BungeePlugin;
+import de.howaner.BungeeCordLib.event.UpdateBungeeCordServersEvent;
+import de.howaner.BungeeCordLib.event.UpdateOnlinePlayersEvent;
+import de.howaner.BungeeCordLib.event.UpdatePlayerIpEvent;
+import de.howaner.BungeeCordLib.event.UpdateServerNameEvent;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
@@ -24,16 +29,25 @@ public class BungeeListener implements PluginMessageListener {
 				for (String s : serverArray)
 					servers.add(s);
 				BungeeCord.getManager().setBungeeServers(servers);
+				UpdateBungeeCordServersEvent event = new UpdateBungeeCordServersEvent(servers);
+				Bukkit.getPluginManager().callEvent(event);
 			} else if (channel.equals("PlayerList")) {
 				if (!in.readUTF().equalsIgnoreCase("ALL")) return;
 				String[] players = in.readUTF().split(", ");
 				BungeeCord.getManager().setOnlinePlayers(players);
+				UpdateOnlinePlayersEvent event = new UpdateOnlinePlayersEvent(players);
+				Bukkit.getPluginManager().callEvent(event);
 			} else if (channel.equals("GetServer")) {
 				String name = in.readUTF();
 				BungeeCord.getManager().setServerName(name);
+				UpdateServerNameEvent event = new UpdateServerNameEvent(name);
+				Bukkit.getPluginManager().callEvent(event);
 			} else if (channel.equals("IP")) {
-				String address = in.readUTF() + ":" + in.readInt();
-				BungeeCord.getManager().setPlayerIp(player.getName(), address);
+				String address = in.readUTF();
+				int port = in.readInt();
+				BungeeCord.getManager().setPlayerIp(player.getName(), address + ":" + port);
+				UpdatePlayerIpEvent event = new UpdatePlayerIpEvent(player.getName(), address, port);
+				Bukkit.getPluginManager().callEvent(event);
 			} else {
 				BungeePlugin.log.info("Undefined BungeeCord Channel: " + channel);
 			}

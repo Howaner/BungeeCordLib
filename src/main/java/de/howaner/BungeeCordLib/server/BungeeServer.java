@@ -20,10 +20,16 @@ public class BungeeServer {
 		this.ip = ip;
 	}
 	
+	/*
+	 * Get the Servername
+	 */
 	public String getName() {
 		return this.name;
 	}
 	
+	/*
+	 * Get the Server IP
+	 */
 	public String getIp() {
 		return this.ip;
 	}
@@ -32,6 +38,11 @@ public class BungeeServer {
 		this.ip = ip;
 	}
 	
+	/*
+	 * This makes a Ping to the Server
+	 * 
+	 * @return The Motd, Slots and Online Players
+	 */
 	public ServerData getData() {
 		try {
 			MinecraftPingProtocol packet = new MinecraftPingProtocol(this.ip);
@@ -43,6 +54,11 @@ public class BungeeServer {
 		}
 	}
 	
+	/*
+	 * Teleport a Player to this Server
+	 * 
+	 * @param player The Player
+	 */
 	public void teleportPlayer(Player player) throws Exception {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(b);
@@ -54,6 +70,12 @@ public class BungeeServer {
 		b.close();
 	}
 	
+	/*
+	 * Send a Packet to this Servers
+	 * 
+	 * @param serverPort The Port of this Server
+	 * @param packet The Packet
+	 */
 	public void sendPacket(final int serverPort, final BungeePacket packet) throws Exception {
 		if (BungeeCord.getManager().getServerName() == null || BungeeCord.getManager().getServerName().isEmpty())
 			throw new Exception("This server has no name!");
