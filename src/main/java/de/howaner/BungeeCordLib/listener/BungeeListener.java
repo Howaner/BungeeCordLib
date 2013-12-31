@@ -9,8 +9,6 @@ import de.howaner.BungeeCordLib.event.UpdatePlayerUUIDEvent;
 import de.howaner.BungeeCordLib.event.UpdateServerNameEvent;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -24,7 +22,6 @@ public class BungeeListener implements PluginMessageListener {
 		
 		try {
 			String channel = in.readUTF();
-			BungeePlugin.log.info("Received BungeeCord Packet: " + channel);
 			
 			if (channel.equalsIgnoreCase("GetServers")) {
 				String[] servers = in.readUTF().split(", ");
@@ -60,7 +57,7 @@ public class BungeeListener implements PluginMessageListener {
 				UpdatePlayerUUIDEvent event = new UpdatePlayerUUIDEvent(player.getName(), uuid);
 				Bukkit.getPluginManager().callEvent(event);
 			} else {
-				BungeePlugin.log.info("Undefined BungeeCord Channel: " + channel);
+				//BungeePlugin.log.info("Undefined BungeeCord Channel: " + channel);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

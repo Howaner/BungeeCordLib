@@ -20,7 +20,6 @@ public class ServerConnectionThread extends Thread {
 			Socket socket;
 			while ((socket = serverSocket.accept()) != null) {
 				try {
-					//Read
 					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					String channel = reader.readLine();
 					String server = reader.readLine();

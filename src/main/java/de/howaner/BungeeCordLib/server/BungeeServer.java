@@ -91,8 +91,9 @@ public class BungeeServer {
 			@Override
 			public void run() {
 				try {
+					System.out.println("Send Packet to " + address + ":" + BungeeCord.getManager().generatePacketPort(BungeeServer.this.getName()) + "!");
 					//Connect
-					Socket client = new Socket(address, BungeeCord.getManager().generatePacketPort(this.getName()));
+					Socket client = new Socket(address, BungeeCord.getManager().generatePacketPort(BungeeServer.this.getName()));
 					client.setSoTimeout(3000);
 					PrintStream out = new PrintStream(client.getOutputStream());
 					

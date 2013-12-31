@@ -457,8 +457,7 @@ public class BungeeCord {
 	 * Call the Listener
 	 */
 	public void callListener(String channel, String server, String message) {
-		List<PacketListener> listeners = this.getListenersFromChannel(channel);
-		for (PacketListener l : listeners)
+		for (PacketListener l : this.getListenersFromChannel(channel))
 			l.receive(server, message);
 	}
 	
