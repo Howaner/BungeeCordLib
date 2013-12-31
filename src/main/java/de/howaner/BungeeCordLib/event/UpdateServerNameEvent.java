@@ -8,6 +8,7 @@ import org.bukkit.event.HandlerList;
  */
 public class UpdateServerNameEvent extends Event {
 	private String name;
+	private static HandlerList handlers = new HandlerList();
 	
 	public UpdateServerNameEvent(String name) {
 		this.name = name;
@@ -19,7 +20,11 @@ public class UpdateServerNameEvent extends Event {
 	
 	@Override
 	public HandlerList getHandlers() {
-		return new HandlerList();
+		return handlers;
+	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 	
 }

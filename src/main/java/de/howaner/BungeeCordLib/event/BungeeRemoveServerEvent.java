@@ -6,6 +6,7 @@ import org.bukkit.event.HandlerList;
 
 public class BungeeRemoveServerEvent extends Event {
 	private BungeeServer server;
+	private static HandlerList handlers = new HandlerList();
 	
 	public BungeeRemoveServerEvent(BungeeServer server) {
 		this.server = server;
@@ -17,7 +18,11 @@ public class BungeeRemoveServerEvent extends Event {
 
 	@Override
 	public HandlerList getHandlers() {
-		return new HandlerList();
+		return handlers;
+	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 	
 }

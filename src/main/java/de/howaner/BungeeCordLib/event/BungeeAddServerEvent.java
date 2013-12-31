@@ -5,24 +5,23 @@ import org.bukkit.event.HandlerList;
 
 public class BungeeAddServerEvent extends Event {
 	private String name;
-	private String ip;
+	private static HandlerList handlers = new HandlerList();
 	
-	public BungeeAddServerEvent(String name, String ip) {
+	public BungeeAddServerEvent(String name) {
 		this.name = name;
-		this.ip = ip;
 	}
 	
 	public String getName() {
 		return this.name;
 	}
-	
-	public String getIp() {
-		return this.ip;
-	}
 
 	@Override
 	public HandlerList getHandlers() {
-		return new HandlerList();
+		return handlers;
+	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 	
 }

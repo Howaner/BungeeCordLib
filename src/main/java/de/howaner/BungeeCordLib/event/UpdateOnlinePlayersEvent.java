@@ -8,6 +8,7 @@ import org.bukkit.event.HandlerList;
  */
 public class UpdateOnlinePlayersEvent extends Event {
 	private String[] players;
+	private static HandlerList handlers = new HandlerList();
 	
 	public UpdateOnlinePlayersEvent(String[] players) {
 		this.players = players;
@@ -19,7 +20,11 @@ public class UpdateOnlinePlayersEvent extends Event {
 
 	@Override
 	public HandlerList getHandlers() {
-		return new HandlerList();
+		return handlers;
+	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 	
 }

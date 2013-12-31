@@ -8,19 +8,24 @@ import org.bukkit.event.HandlerList;
  * This was call, when BungeeCord send me a List with all BungeeCord Servers
  */
 public class UpdateBungeeCordServersEvent extends Event {
-	private List<String> servers;
+	private String[] servers;
+	private static HandlerList handlers = new HandlerList();
 	
-	public UpdateBungeeCordServersEvent(List<String> servers) {
+	public UpdateBungeeCordServersEvent(String[] servers) {
 		this.servers = servers;
 	}
 	
-	public List<String> getServers() {
+	public String[] getServers() {
 		return this.servers;
 	}
 
 	@Override
 	public HandlerList getHandlers() {
-		return new HandlerList();
+		return handlers;
+	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 	
 }

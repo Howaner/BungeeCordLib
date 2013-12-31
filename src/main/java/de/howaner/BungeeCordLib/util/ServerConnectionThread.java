@@ -1,44 +1,45 @@
 package de.howaner.BungeeCordLib.util;
 
-import de.howaner.BungeeCordLib.server.BungeePacketServer;
+import de.howaner.BungeeCordLib.BungeeCord;
+import de.howaner.BungeeCordLib.BungeePlugin;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerConnectionThread extends Thread {
-	private int port;
-	private BungeePacketServer listener;
+	public ServerSocket serverSocket;
 	
-	public ServerConnectionThread(int port, BungeePacketServer listener) {
-		this.port = port;
-		this.listener = listener;
+	public ServerConnectionThread(ServerSocket socket) {
+		this.serverSocket = socket;
 	}
 	
 	@Override
 	public void run() {
 		try {
-			ServerSocket serverSocket = new ServerSocket(port);
-			
 			Socket socket;
 			while ((socket = serverSocket.accept()) != null) {
-				//Read
-				BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				String server = reader.readLine();
-				String title = reader.readLine();
-				String message = reader.readLine();
-				
-				PrintStream writer = new PrintStream(socket.getOutputStream());
-				writer.print(listener.run(server, title, message) + '\n');
-				writer.flush();
-				
-				reader.close();
-				writer.close();
-				socket.close();
+				try {
+					//Read
+					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+					String channel = reader.readLine();
+					String server = reader.readLine();
+					String message = reader.readLine();
+					
+					BungeeCord.getManager().callListener(channel, server, message);
+					/*PrintStream writer = new PrintStream(socket.getOutputStream());
+					writer.print(listener.run(server, title, message) + '\n');
+					writer.flush();
+					writer.close();*/
+					
+					reader.close();
+					socket.close();
+				} catch (Exception e) {
+					BungeePlugin.log.warning("Packet Read Error: " + e.getMessage());
+				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			BungeePlugin.log.warning(e.getMessage());
 		}
 	}
 	

@@ -4,30 +4,24 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * This was call, when BungeeCord send the right Player Ip
+ * Thats call, when BungeeCord send the right Player UUID
  */
-public class UpdatePlayerIpEvent extends Event {
+public class UpdatePlayerUUIDEvent extends Event {
 	private String player;
-	private String ip;
-	private int port;
+	private String uuid;
 	private static HandlerList handlers = new HandlerList();
 
-	public UpdatePlayerIpEvent(String player, String ip, int port) {
+	public UpdatePlayerUUIDEvent(String player, String uuid) {
 		this.player = player;
-		this.ip = ip;
-		this.port = port;
+		this.uuid = uuid;
 	}
 	
 	public String getPlayer() {
 		return this.player;
 	}
 	
-	public String getAddress() {
-		return this.ip;
-	}
-	
-	public int getPort() {
-		return this.port;
+	public String getUUID() {
+		return this.uuid;
 	}
 	
 	@Override

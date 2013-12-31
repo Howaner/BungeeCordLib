@@ -20,13 +20,14 @@ public class BungeePlugin extends JavaPlugin {
 		Bukkit.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new BungeeListener());
 		Bukkit.getPluginManager().registerEvents(new BukkitListener(), this);
 		manager.initialize();
+		manager.startPacketServer();
 		log.info("Manager loaded!");
 	}
 	
 	@Override
 	public void onDisable() {
-		for (int id : manager.getPacketServers())
-			manager.removePacketServer(id);
+		manager.stopPacketServer();
+		log.info("Manager unloaded!");
 	}
 	
 	public static BungeeCord getManager() {
