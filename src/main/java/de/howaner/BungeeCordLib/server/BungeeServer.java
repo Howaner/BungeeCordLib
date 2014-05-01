@@ -1,8 +1,10 @@
 package de.howaner.BungeeCordLib.server;
 
+import com.google.common.base.Charsets;
 import de.howaner.BungeeCordLib.BungeeCord;
 import de.howaner.BungeeCordLib.BungeePlugin;
 import de.howaner.BungeeCordLib.util.MinecraftPingProtocol;
+import de.howaner.BungeeCordLib.util.StatusResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.PrintStream;
@@ -36,17 +38,15 @@ public class BungeeServer {
 	}
 	
 	/**
-	 * This makes a Ping to the Server
+	 * This ping the Server and get out the informations (etc. players, motd, slots, ...)
 	 * 
-	 * @return The Motd, Slots and Online Players
+	 * @return StatusResponse
 	 */
-	public ServerData getData() {
+	public StatusResponse getData() {
 		if (this.ip == null || this.ip.isEmpty()) return null; //No Server IP
 		try {
 			MinecraftPingProtocol packet = new MinecraftPingProtocol(this.ip);
-			Object[] values = packet.read();
-			ServerData data = new ServerData(this, (Integer)values[2], (Integer)values[1], (String)values[0]);
-			return data;
+			return packet.read();
 		} catch (Exception e) {
 			return null;
 		}
@@ -95,7 +95,7 @@ public class BungeeServer {
 					//Connect
 					Socket client = new Socket(address, BungeeCord.getManager().generatePacketPort(BungeeServer.this.getName()));
 					client.setSoTimeout(3000);
-					PrintStream out = new PrintStream(client.getOutputStream());
+					PrintStream out = new PrintStream(client.getOutputStream(), false, "UTF-8");
 					
 					//Send Message
 					StringBuilder builder = new StringBuilder();
@@ -106,13 +106,8 @@ public class BungeeServer {
 					builder.append(message);
 					builder.append('\n');
 					out.print(builder.toString());
+					
 					out.flush();
-					
-					//Receive Messages
-					/*BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-					packet.read(in.readLine());*/
-					
-					//in.close();
 					out.close();
 				} catch (Exception e) {
 					e.printStackTrace();

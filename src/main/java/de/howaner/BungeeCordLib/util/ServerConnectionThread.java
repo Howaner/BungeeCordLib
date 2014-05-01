@@ -1,5 +1,6 @@
 package de.howaner.BungeeCordLib.util;
 
+import com.google.common.base.Charsets;
 import de.howaner.BungeeCordLib.BungeeCord;
 import de.howaner.BungeeCordLib.BungeePlugin;
 import java.io.BufferedReader;
@@ -20,7 +21,7 @@ public class ServerConnectionThread extends Thread {
 			Socket socket;
 			while ((socket = serverSocket.accept()) != null) {
 				try {
-					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Charsets.UTF_8));
 					String channel = reader.readLine();
 					String server = reader.readLine();
 					String message = reader.readLine();
